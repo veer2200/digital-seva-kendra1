@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>डिजिटल सेवा केंद्र + VS Vaibhav Press</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #0d9488;
+            --dark-color: #1f2937;
+            --light-color: #f3f4f6;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+            --whatsapp-color: #25d366;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e5e7eb;
+            color: var(--dark-color);
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #2563eb);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .navbar .brand { font-size: 20px; font-weight: bold; }
+        .navbar .contact-info { font-size: 13px; text-align: right; line-height: 1.4; opacity: 0.95; }
+
+        .container {
+            max-width: 950px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #6b7280;
+            border-radius: 6px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .card.active { display: block; }
+
+        h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 15px; }
+
+        .row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 200px; }
+
+        .btn {
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-success { background-color: var(--success-color); }
+        .btn-secondary { background-color: #4b5563; }
+        .btn-whatsapp { background-color: var(--whatsapp-color); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+        th { background-color: #f9fafb; color: #374151; }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
+        .badge-paid { background-color: #d1fae5; color: #065f46; }
+        .badge-pending { background-color: #fee2e2; color: #991b1b; }
+
+        .search-box { margin-bottom: 15px; padding: 10px; background: #f9fafb; border-radius: 6px; border: 1px solid #e5e7eb; }
+        #invoice-view { background: white; border: 2px dashed #9ca3af; padding: 30px; border-radius: 8px; max-width: 500px; margin: 0 auto; }
+        .invoice-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #374151; padding-bottom: 10px; }
+        .invoice-title { font-size: 20px; font-weight: bold; color: var(--primary-color); }
+        .invoice-subtitle { font-size: 16px; font-weight: 600; margin-top: 2px; }
+        .invoice-details { margin-bottom: 15px; font-size: 14px; line-height: 1.6; text-align: left; }
+        .invoice-total-row { font-weight: bold; font-size: 16px; border-top: 2px solid #374151; }
+        .due-alert { color: var(--danger-color); font-weight: bold; text-align: center; margin-top: 10px; border: 1px solid var(--danger-color); padding: 5px; border-radius: 4px; }
+
+        .footer { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--dark-color); color: #9ca3af; text-align: center; padding: 10px; font-size: 12px; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #invoice-view, #invoice-view * { visibility: visible; }
+            #invoice-view { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="brand">डिजिटल सेवा केंद्र + VS Vaibhav Press</div>
+        <div class="contact-info">
+            Pro: वीर कुमार सिंह<br>
+            📞 9576906992, 6207070941<br>
+            📍 फतेहपुर, रोसड़ा
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tabs no-print">
+            <button class="tab-btn active" onclick="switchTab('entry-tab')">📝 न्यू एंट्री</button>
+            <button class="tab-btn" onclick="switchTab('history-tab')">📋 ग्राहक रजिस्टर & ट्रैकर</button>
+            <button class="tab-btn" onclick="switchTab('admin-tab')">⚙️ एडमिन पैनल</button>
+        </div>
+
+        <!-- TAB 1: FORM -->
+        <div id="entry-tab" class="card active">
+            <h2>कस्टमर सर्विस एंट्री फॉर्म</h2>
+            <form id="customerForm" onsubmit="generateBill(event)">
+                <div class="row">
+                    <div class="col form-group">
+                        <label>ग्राहक का नाम *</label>
+                        <input type="text" id="custName" class="form-control" placeholder="नाम लिखें" required>
+                    </div>
+                    <div class="col form-group">
+                        <label>मोबाइल नंबर *</label>
+                        <input type="tel" id="custMobile" class="form-control" placeholder="10 अंकों का नंबर" required pattern="[0-9]{10}">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col form-group">
+                        <label>सर्विस चुनें *</label>
+                        <select id="serviceSelect" class="form-control" onchange="updateFormRate()" required></select>
+                    </div>
+                    <div class="col form-group">
+                        <label>रेट (₹)</label>
+                        <input type="number" id="serviceRate" class="form-control" readonly>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col form-group">
+                        <label>एडवांस दिया (₹)</label>
+                        <input type="number" id="amountPaid" class="form-control" value="0" min="0" oninput="calculatePending()">
+                    </div>
+                    <div class="col form-group">
+                        <label>बाकी राशि (₹)</label>
+                        <input type="number" id="amountPending" class="form-control" value="0" readonly>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col form-group">
+                        <label>पेमेंट स्थिति *</label>
+                        <select id="paymentStatus" class="form-control">
+                            <option value="Paid">Paid (पूरा मिला)</option>
+                            <option value="Pending">Pending (बाकी है)</option>
+                        </select>
+                    </div>
+                    <div class="col form-group">
+                        <label>वर्क स्टेटस (Work Status) *</label>
+                        <select id="workStatus" class="form-control">
+                            <option value="Received">Received (ऑर्डर मिला)</option>
+                            <option value="In Progress">In Progress (काम चालू है)</option>
+                            <option value="Ready">Ready (तैयार है)</option>
+                            <option value="Delivered">Delivered (दे दिया गया)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save & Generate Bill (रसीद निकालें)</button>
+            </form>
+        </div>
+
+        <!-- TAB 2: REGISTER -->
+        <div id="history-tab" class="card">
+            <h2>ग्राहक रजिस्टर एवं लाइव वर्क ट्रैकर</h2>
+            <div class="search-box no-print">
+                <input type="text" id="searchInput" class="form-control" placeholder="🔍 ग्राहक का नाम या मोबाइल नंबर..." oninput="renderHistoryTable()">
+            </div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>तारीख</th>
+                            <th>ग्राहक का नाम</th>
+                            <th>मोबाइल</th>
+                            <th>सर्विस</th>
+                            <th>पेमेंट हिसाब</th>
+                            <th>वर्क स्टेटस (बदलें)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: ADMIN -->
+        <div id="admin-tab" class="card">
+            <div id="adminAuth" class="admin-lock">
+                <h2>एडमिन लॉगिन सुरक्षित क्षेत्र</h2>
+                <div class="form-group" style="max-width: 300px; margin: 0 auto 15px;">
+                    <input type="password" id="adminPass" class="form-control" placeholder="पासवर्ड (1234)">
+                </div>
+                <button type="button" class="btn btn-primary" style="max-width: 200px;" onclick="checkAdminPass()">लॉगिन करें</button>
+            </div>
+            <div id="adminContent" style="display: none;">
+                <h2>Manage Service Rates (रेट मैनेजर)</h2>
+                <div id="rateManagerList"></div>
+            </div>
+        </div>
+
+        <!-- INVOICE AREA -->
+        <div id="invoiceContainer" class="card" style="margin-top: 20px; display: none;">
+            <div id="invoice-view">
+                <div class="invoice-header">
+                    <div class="invoice-title">डिजिटल सेवा केंद्र</div>
+                    <div class="invoice-subtitle">VS VAIBHAV PRESS</div>
+                    <div style="font-size: 13px; margin-top: 5px;">वार्ड नंबर-06, फतेहपुर, मोतीपुर, रोसड़ा</div>
+                    <div style="font-size: 12px; font-weight: 600;">Pro: वीर कुमार सिंह | Mob: 9576906992, 6207070941</div>
+                </div>
+                <div class="invoice-details">
+                    <strong>रसीद संख्या:</strong> <span id="invId"></span><br>
+                    <strong>दिनांक:</strong> <span id="invDate"></span><br>
+                    <strong>ग्राहक का नाम:</strong> <span id="invName"></span><br>
+                    <strong>मोबाइल नंबर:</strong> <span id="invMobile"></span><br>
+                    <strong>काम की स्थिति:</strong> <span id="invWorkStatus" style="font-weight: bold;"></span>
+                </div>
+                <table>
+                    <thead>
+                        <tr><th>विवरण (Service)</th><th style="text-align: right;">कुल मूल्य</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td id="invService"></td><td id="invCost" style="text-align: right;"></td></tr>
+                        <tr class="invoice-total-row"><td>प्राप्त राशि (Paid):</td><td id="invPaid" style="text-align: right;"></td></tr>
+                        <tr class="invoice-total-row"><td>शेष राशि (Due):</td><td id="invDue" style="text-align: right;"></td></tr>
+                    </tbody>
+                </table>
+                <div id="dueAlertContainer"></div>
+                <div style="text-align: center; margin-top: 25px; font-size: 12px; border-top: 1px dashed #9ca3af; padding-top: 10px;">
+                    <strong>जय माता दी! हमारे यहाँ आने के लिए धन्यवाद।</strong>
+                </div>
+            </div>
+            <div class="row no-print" style="margin-top: 20px;">
+                <div class="col"><button class="btn btn-secondary" onclick="closeInvoice()">बंद करें</button></div>
+                <div class="col"><button class="btn btn-success" onclick="window.print()">Print Bill</button></div>
+                <div class="col"><a id="whatsappBtn" href="#" target="_blank" class="btn btn-whatsapp">💬 Send WhatsApp</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer no-print">
+        &copy; 2026 डिजिटल सेवा केंद्र + VS Vaibhav Press | प्रो: वीर कुमार सिंह
+    </div>
+
+    <script>
+        const defaultRates = {
+            "Pan Card": 180,
+            "Aadhar Print / Lamination": 30,
+            "Flex Banner Printing": 12,
+            "Shadi Card (Wedding Card)": 15,
+            "Pamphelts / Handbills": 2,
+            "Visiting Card (100 Nos)": 350
+        };
+
+        let activeRates = JSON.parse(localStorage.getItem('serviceRates')) || defaultRates;
+        let customerEntries = JSON.parse(localStorage.getItem('customerEntries')) || [];
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            const btnIndex = tabId === 'entry-tab' ? 0 : tabId === 'history-tab' ? 1 : 2;
+            document.querySelectorAll('.tab-btn')[btnIndex].classList.add('active');
+            document.getElementById('invoiceContainer').style.display = 'none';
+
+            if(tabId === 'entry-tab') loadServicesDropdown();
+            if(tabId === 'history-tab') renderHistoryTable();
+        }
+
+        function closeInvoice() {
+            document.getElementById('invoiceContainer').style.display = 'none';
+        }
+
+        function loadServicesDropdown() {
+            const select = document.getElementById('serviceSelect');
+            if(!select) return;
+            select.innerHTML = '';
+            const rates = JSON.parse(localStorage.getItem('serviceRates')) || defaultRates;
+            for (let service in rates) {
+                let opt = document.createElement('option');
+                opt.value = service;
+                opt.innerText = service;
+                select.appendChild(opt);
+            }
+            updateFormRate();
+        }
+
+        function updateFormRate() {
+            const service = document.getElementById('serviceSelect').value;
+            if(!service) return;
+            const rates = JSON.parse(localStorage.getItem('serviceRates')) || defaultRates;
+            document.getElementById('serviceRate').value = rates[service] || 0;
+            calculatePending();
+        }
+
+        function calculatePending() {
+            const rate = parseFloat(document.getElementById('serviceRate').value) || 0;
+            const paid = parseFloat(document.getElementById('amountPaid').value) || 0;
+            const pending = rate - paid;
+            document.getElementById('amountPending').value = pending >= 0 ? pending : 0;
+            document.getElementById('paymentStatus').value = pending <= 0 ? "Paid" : "Pending";
+        }
+
+        function generateBill(e) {
+            e.preventDefault();
+            const name = document.getElementById('custName').value;
+            const mobile = document.getElementById('custMobile').value;
+            const service = document.getElementById('serviceSelect').value;
+            const rate = document.getElementById('serviceRate').value;
+            const paid = document.getElementById('amountPaid').value;
+            const pending = document.getElementById('amountPending').value;
+            const pStatus = document.getElementById('paymentStatus').value;
+            const wStatus = document.getElementById('workStatus').value;
+            const dateStr = new Date().toLocaleDateString('hi-IN') + " " + new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
+            const invoiceId = "VP-" + Math.floor(100000 + Math.random() * 900000);
+
+            customerEntries.unshift({ id: invoiceId, date: dateStr, name: name, mobile: mobile, service: service, rate: rate, status: pStatus, workStatus: wStatus });
+            localStorage.setItem('customerEntries', JSON.stringify(customerEntries));
+
+            document.getElementById('invId').innerText = invoiceId;
+            document.getElementById('invDate').innerText = dateStr;
+            document.getElementById('invName').innerText = name;
+            document.getElementById('invMobile').innerText = mobile;
+            document.getElementById('invService').innerText = service;
+            document.getElementById('invCost').innerText = "₹" + rate;
+            document.getElementById('invPaid').innerText = "₹" + paid;
+            document.getElementById('invDue').innerText = "₹" + pending;
+            document.getElementById('invWorkStatus').innerText = wStatus;
+
+            // WhatsApp Message Text
+            const msg = `नमस्ते ${name},\n*डिजिटल सेवा केंद्र + VS Vaibhav Press (फतेहपुर, रोसड़ा)* में आपका स्वागत है।\n\n🧾 *बिल रसीद विवरण:*\nरसीद संख्या: ${invoiceId}\nसर्विस: ${service}\nकुल मूल्य: ₹${rate}\nप्राप्त राशि: ₹${paid}\nबकाया राशि: ₹${pending}\nकाम की स्थिति: *${wStatus}*\n\nPro: वीर कुमार सिंह\nMob: 9576906992, 6207070941\n\nजय माता दी! हमारे यहाँ आने के लिए धन्यवाद।`;
+            const encodedMsg = encodeURIComponent(msg);
+            document.getElementById('whatsappBtn').href = `https://wa.me/91${mobile}?text=${encodedMsg}`;
+
+            document.getElementById('dueAlertContainer').innerHTML = parseFloat(pending) > 0 ? `<div class="due-alert">⚠️ बकाया राशि: ₹${pending}</div>` : '';
+            document.getElementById('invoiceContainer').style.display = 'block';
+            document.getElementById('invoiceContainer').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('customerForm').reset();
+            loadServicesDropdown();
+        }
+
+        function updateLiveStatus(entryId, newStatus) {
+            customerEntries = customerEntries.map(entry => {
+                if(entry.id === entryId) entry.workStatus = newStatus;
+                return entry;
+            });
+            localStorage.setItem('customerEntries', JSON.stringify(customerEntries));
+            alert('स्टेटस बदल दिया गया है!');
+            renderHistoryTable();
+        }
+
+        function renderHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = '';
+            const filter = document.getElementById('searchInput').value.toLowerCase();
+            const filteredEntries = customerEntries.filter(entry => entry.name.toLowerCase().includes(filter) || entry.mobile.includes(filter));
+
+            if(filteredEntries.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">कोई रिकॉर्ड नहीं मिला।</td></tr>`;
+                return;
+            }
+
+            filteredEntries.forEach(entry => {
+           
